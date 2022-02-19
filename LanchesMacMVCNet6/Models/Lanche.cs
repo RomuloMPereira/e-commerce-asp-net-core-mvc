@@ -6,6 +6,7 @@ namespace LanchesMacMVCNet6.Models
     [Table("Lanches")]
     public class Lanche
     {
+        [Key]
         public int LancheId { get; set; }
 
         [Required(ErrorMessage = "O nome do lanche deve ser informado")]
@@ -28,7 +29,7 @@ namespace LanchesMacMVCNet6.Models
         [Required(ErrorMessage = "Informe o preço do produto")]
         [Display(Name = "Preço")]
         [Column(TypeName = "decimal(18,2)")]
-        [Range(1, 99.99, ErrorMessage = "O preço deve estar entre 1 e 99,99")]
+        [Range(1, 999.99, ErrorMessage = "O preço deve estar entre 1 e 999,99")]
         public decimal Preco { get; set; }
 
         [Display(Name = "Caminho Imagem Normal")]

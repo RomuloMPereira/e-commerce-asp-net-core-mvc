@@ -1,4 +1,7 @@
-﻿namespace LanchesMacMVCNet6;
+﻿using LanchesMacMVCNet6.Context;
+using Microsoft.EntityFrameworkCore;
+
+namespace LanchesMacMVCNet6;
 
 public class Startup
 {
