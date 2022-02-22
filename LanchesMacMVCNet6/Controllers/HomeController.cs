@@ -1,4 +1,6 @@
 ﻿using LanchesMacMVCNet6.Models;
+using LanchesMacMVCNet6.Repositories.Interfaces;
+using LanchesMacMVCNet6.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,15 +8,19 @@ namespace LanchesMacMVCNet6.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        private readonly ILancheRepository _lancheRepository;
+        public HomeController(ILancheRepository lancheRepository)
         {
-            return View();
+            _lancheRepository = lancheRepository;
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public ViewResult Index()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var homeViewModel = new HomeViewModel
+            {
+                LanchesPreferidos = _lancheRepository.LanchesPreferidos
+            };
+            return View(homeViewModel);
         }
     }
 }
