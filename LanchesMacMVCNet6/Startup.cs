@@ -1,4 +1,5 @@
 ﻿using LanchesMacMVCNet6.Context;
+using LanchesMacMVCNet6.Models;
 using LanchesMacMVCNet6.Repositories;
 using LanchesMacMVCNet6.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +26,8 @@ public class Startup
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+        services.AddScoped(sp => CarrinhoCompra.GetCarrinho(sp));
 
         services.AddMemoryCache();
         services.AddSession();
