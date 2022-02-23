@@ -1,4 +1,5 @@
-﻿using LanchesMacMVCNet6.Repositories.Interfaces;
+﻿using LanchesMacMVCNet6.Models;
+using LanchesMacMVCNet6.Repositories.Interfaces;
 using LanchesMacMVCNet6.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,30 @@ namespace LanchesMacMVCNet6.Controllers
         {
             _lancheRepository = lancheRepository;
         }
-        public IActionResult List()
+        public IActionResult List(string categoria)
         {
-            var lancheListViewModel = new LancheListViewModel();
-            lancheListViewModel.Lanches = _lancheRepository.Lanches;
-            lancheListViewModel.CategoriaAtual = "Categoria Atual";
+            IEnumerable<Lanche> lanches;
+            string categoriaAtual = string.Empty;
+
+            if (string.IsNullOrEmpty(categoria))
+            {
+                lanches = _lancheRepository.Lanches.OrderBy(p => p.LancheId);
+                categoriaAtual = "Todos os lanches";
+            }
+            else
+            {
+                lanches = _lancheRepository.Lanches
+                           .Where(p => p.Categoria.CategoriaNome.Equals(categoria))
+                           .OrderBy(p => p.Nome);
+
+                categoriaAtual = categoria;
+            }
+
+            var lancheListViewModel = new LancheListViewModel
+            {
+                Lanches = lanches,
+                CategoriaAtual = categoriaAtual
+            };
 
             return View(lancheListViewModel);
         }
