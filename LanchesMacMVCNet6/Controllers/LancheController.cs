@@ -46,5 +46,32 @@ namespace LanchesMacMVCNet6.Controllers
             var lanche = _lancheRepository.Lanches.FirstOrDefault(d => d.LancheId == lancheId);
             return View(lanche);
         }
+
+        public ViewResult Search(string searchString)
+        {
+            string _searchString = searchString;
+            IEnumerable<Lanche> lanches;
+            string currentCategory = string.Empty;
+
+            if (string.IsNullOrEmpty(_searchString))
+            {
+                lanches = _lancheRepository.Lanches.OrderBy(p => p.LancheId);
+                currentCategory = "Todos os lanches";
+            }
+            else
+            {
+                lanches = _lancheRepository.Lanches.Where(p => p.Nome.ToLower().Contains(_searchString.ToLower()));
+                if (lanches.Any())
+                    currentCategory = "Lanches";
+                else
+                    currentCategory = "Nenhum lanche foi encontrado";
+            }
+
+            return View("~/Views/Lanche/List.cshtml", new LancheListViewModel
+            {
+                Lanches = lanches,
+                CategoriaAtual = currentCategory
+            });
+        }
     }
 }
