@@ -27,16 +27,16 @@ public class Startup
                  .AddEntityFrameworkStores<AppDbContext>()
                  .AddDefaultTokenProviders();
 
-       // services.Configure<IdentityOptions>(options =>
-       //{
-       //    //Default Password Settings
-       //    options.Password.RequireDigit = true;
-       //    options.Password.RequireLowercase = true;
-       //    options.Password.RequireNonAlphanumeric = true;
-       //    options.Password.RequireUppercase = true;
-       //    options.Password.RequiredLength = 6;
-       //    options.Password.RequiredUniqueChars = 1;
-       //});
+        // services.Configure<IdentityOptions>(options =>
+        //{
+        //    //Default Password Settings
+        //    options.Password.RequireDigit = true;
+        //    options.Password.RequireLowercase = true;
+        //    options.Password.RequireNonAlphanumeric = true;
+        //    options.Password.RequireUppercase = true;
+        //    options.Password.RequiredLength = 6;
+        //    options.Password.RequiredUniqueChars = 1;
+        //});
 
         services.AddTransient<ILancheRepository, LancheRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
@@ -75,6 +75,9 @@ public class Startup
 
         app.UseEndpoints(endpoints =>
         {
+            endpoints.MapControllerRoute(name: "areas",
+            pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}" );
+
             endpoints.MapControllerRoute(name: "categoriaFiltro",
                    pattern: "Lanche/{action}/{categoria?}",
                    defaults: new { Controller = "Lanche", action = "List" });
