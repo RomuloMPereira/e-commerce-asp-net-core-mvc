@@ -2,6 +2,7 @@
 using LanchesMacMVCNet6.Models;
 using LanchesMacMVCNet6.Repositories;
 using LanchesMacMVCNet6.Repositories.Interfaces;
+using LanchesMacMVCNet6.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,6 +42,15 @@ public class Startup
         services.AddTransient<ILancheRepository, LancheRepository>();
         services.AddTransient<ICategoriaRepository, CategoriaRepository>();
         services.AddTransient<IPedidoRepository, PedidoRepository>();
+        services.AddScoped<ISeedUserRoleInitial, SeedUserRoleInitial>();
+
+        services.AddAuthorization( options =>
+        {
+            options.AddPolicy("Admin", policy =>
+            {
+                policy.RequireRole("Admin");
+            });
+        });
 
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
@@ -51,7 +61,7 @@ public class Startup
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ISeedUserRoleInitial seedUserRoleInitial)
     {
         if (env.IsDevelopment())
         {
@@ -67,6 +77,9 @@ public class Startup
         app.UseStaticFiles();
 
         app.UseRouting();
+
+        seedUserRoleInitial.seedRoles();
+        seedUserRoleInitial.seedUsers();
 
         app.UseSession();
 
