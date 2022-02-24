@@ -53,5 +53,37 @@ namespace LanchesMacMVCNet6.Controllers
             ModelState.AddModelError("", "Usuário/Senha inválidos ou não localizados!!");
             return View(loginVM);
         }
+
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(LoginViewModel registroVM)
+        {
+
+            if (ModelState.IsValid)
+            {
+                var user = new IdentityUser() { UserName = registroVM.UserName };
+                var result = await _userManager.CreateAsync(user, registroVM.Password);
+
+                if (result.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, isPersistent: false);
+
+                    return RedirectToAction("LoggedIn", "Account");
+                }
+                else
+                {
+                    this.ModelState.AddModelError("Registro", "Falha ao realizar o registro, verifique o usuário/senha usados");
+                }
+
+            }
+            return View(registroVM);
+        }
+
+        public ViewResult LoggedIn() => View();
     }
 }
