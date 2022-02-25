@@ -97,5 +97,10 @@ namespace LanchesMacMVCNet6.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
