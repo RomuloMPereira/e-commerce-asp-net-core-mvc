@@ -9,6 +9,7 @@ using LanchesMacMVCNet6.Context;
 using LanchesMacMVCNet6.Models;
 using Microsoft.AspNetCore.Authorization;
 using ReflectionIT.Mvc.Paging;
+using LanchesMacMVCNet6.ViewModels;
 
 namespace LanchesMacMVCNet6.Areas.Admin.Controllers
 {
@@ -169,6 +170,27 @@ namespace LanchesMacMVCNet6.Areas.Admin.Controllers
         private bool PedidoExists(int id)
         {
             return _context.Pedidos.Any(e => e.PedidoId == id);
+        }
+
+        public IActionResult PedidoLanches(int? id)
+        {
+            var pedido = _context.Pedidos
+                          .Include(pd => pd.PedidoItens)
+                          .ThenInclude(l => l.Lanche)
+                          .FirstOrDefault(p => p.PedidoId == id);
+
+            if (pedido == null)
+            {
+                Response.StatusCode = 404;
+                return View("PedidoNotFound", id.Value);
+            }
+
+            PedidoLancheViewModel pedidoLanches = new PedidoLancheViewModel()
+            {
+                Pedido = pedido,
+                PedidoDetalhes = pedido.PedidoItens
+            };
+            return View(pedidoLanches);
         }
     }
 }
