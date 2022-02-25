@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LanchesMacMVCNet6.Context;
 using LanchesMacMVCNet6.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LanchesMacMVCNet6.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdminPedidosController : Controller
     {
         private readonly AppDbContext _context;
